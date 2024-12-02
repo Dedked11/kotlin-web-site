@@ -10,7 +10,7 @@ In the previous chapter, we covered how you can use extension functions to exten
 But what if you are working on something complex where sharing code **between** classes would be useful? In such cases, 
 you can use class inheritance.
 
-By default, classes in Kotlin can't be inherited. This is by design to prevent unintended inheritance and make
+By default, classes in Kotlin can't be inherited. This is designed to prevent unintended inheritance and make
 your classes easier to maintain.
 
 Kotlin classes only support **single inheritance**, meaning it is only possible to inherit from **one class at a time**.
@@ -61,15 +61,10 @@ To create an abstract class, use the `abstract` keyword:
 abstract class Animal
 ```
 
-To declare a function **without** an implementation, you also use the `abstract` keyword:
+To declare a function or a property **without** an implementation, you also use the `abstract` keyword:
 
 ```kotlin
 abstract fun makeSound()
-```
-
-And similarly for a property:
-
-```kotlin
 abstract val sound: String
 ```
 
@@ -77,7 +72,7 @@ For example, let's say that you want to create an abstract class called `Product
 to define different product categories:
 
 ```kotlin
-abstract class Product( val name: String, var price: Double ) {
+abstract class Product(val name: String, var price: Double) {
     // Abstract function to get the product category
     abstract fun category(): String
 
@@ -90,7 +85,7 @@ abstract class Product( val name: String, var price: Double ) {
 
 In the abstract class:
 
-* The constructor has two parameters for the `name` and the `price` of the product.
+* The constructor has two parameters for the product's `name` and `price`.
 * There is an abstract function that returns the product category as a string.
 * There is a function that prints information about the product.
 
@@ -98,7 +93,7 @@ Let's create a child class for electronics. Before you define an implementation 
 you must use the `override` keyword:
 
 ```kotlin
-class Electronic( name: String, price: Double, val warranty: Int ) : Product(name, price) {
+class Electronic(name: String, price: Double, val warranty: Int) : Product(name, price) {
     override val category = "Electronic"
 }
 ```
@@ -121,10 +116,10 @@ fun main() {
 }
 ```
 
-Although abstract classes are great for sharing code in this way, they are restricted by the fact that classes in Kotlin
+Although abstract classes are great for sharing code in this way, they are restricted because classes in Kotlin
 only support single inheritance. If you need to inherit from multiple sources, consider using interfaces.
 
-For more information about abstract classes, see [Abstract classes](classes.md#abstract-classes).
+For more information, see [Abstract classes](classes.md#abstract-classes).
 
 ## Interfaces
 
@@ -153,8 +148,8 @@ interface PaymentMethod
 Interfaces support multiple inheritance so a class can implement multiple interfaces at once. First, let's consider
 the scenario where a class implements **one** interface.
 
-To create a class that implements an interface, add a colon after your class header followed by the name of the interface
-that you want to implement. You don't use parentheses `()` after the interface name, because interfaces don't have a 
+To create a class that implements an interface, add a colon after your class header, followed by the interface name
+that you want to implement. You don't use parentheses `()` after the interface name because interfaces don't have a 
 constructor:
 
 ```kotlin
@@ -209,12 +204,13 @@ interface PaymentType {
     val paymentType: String
 }
 
-class CreditCardPayment(val cardNumber: String, val cardHolderName: String, val expiryDate: String) : PaymentMethod, PaymentType {
+class CreditCardPayment(val cardNumber: String, val cardHolderName: String, val expiryDate: String) : PaymentMethod,
+    PaymentType {
     override fun initiatePayment(amount: Double): String {
         // Simulate processing payment with credit card
         return "Payment of $$amount initiated using Credit Card ending in ${cardNumber.takeLast(4)}."
     }
-    
+
     override val paymentType: String = "Credit Card"
 }
 
@@ -230,8 +226,8 @@ fun main() {
 
 In the example:
 
-* `PaymentMethod` is an interface that has an `initiatePayment()` function without an implementation.
-* `PaymentType` is an interface that has a `paymentType` property that isn't initialized.
+* `PaymentMethod` is an interface that has the `initiatePayment()` function without an implementation.
+* `PaymentType` is an interface that has the `paymentType` property that isn't initialized.
 * `CreditCardPayment` is a class that implements the `PaymentMethod` and `PaymentType` interfaces.
 * The `CreditCardPayment` class overrides the inherited `initiatePayment()` function and the `paymentType` property.
 * `paymentMethod` is an instance of the `CreditCardPayment` class.
@@ -242,9 +238,8 @@ For more information about interfaces and interface inheritance, see [Interfaces
 
 ## Delegation
 
-Interfaces are useful but if your interface contains many functions, child classes may end up with a lot of 
-boilerplate code. When you only want to override a small part of your parent's behavior, this can feel like you are
-having to repeat yourself a lot.
+Interfaces are useful, but if your interface contains many functions, child classes may end up with a lot of 
+boilerplate code. When you only want to override a small part of your parent's behavior, you need to repeat yourself a lot.
 
 > Boilerplate code is a chunk of code that is reused with little or no alteration in multiple parts of a software project.
 > 
@@ -269,6 +264,7 @@ class Circle : Drawable {
     override fun draw() {
         TODO("An example implementation")
     }
+    
     override fun resize() {
         TODO("An example implementation")
     }
@@ -280,14 +276,16 @@ If you wanted to create a child class of the `Circle` class which had the same b
 
 ```kotlin
 class RedCircle(val circle: Circle) : Circle {
-    
+
     // Start of boilerplate code
     override fun draw() {
         circle.draw()
     }
+
     override fun resize() {
         circle.resize()
     }
+
     // End of boilerplate
     override val color = "red"
 }
@@ -296,12 +294,12 @@ class RedCircle(val circle: Circle) : Circle {
 You can see here that if you have a large number of member functions in the `Drawable` interface, the amount of boilerplate
 code in the `RedCircle` class can be very large. However, there is an alternative.
 
-In Kotlin, you can use delegation to delegate the implementation of the interface to an instance of a class. For example,
+In Kotlin, you can use delegation to delegate the interface implementation to an instance of a class. For example,
 you can create an instance of the `Circle` class and delegate the implementations of the member functions of the `Circle`
 class to this instance. To do this, use the `by` keyword. For example:
 
 ```kotlin
-class RedCircle(param : Circle) : Circle by param
+class RedCircle(param: Circle) : Circle by param
 ```
 
 Here, `param` is the name of the instance of the `Circle` class that the implementations of member functions are delegated to.
@@ -322,7 +320,7 @@ class RedCircle(param : Circle) : Circle by param {
 If you want to, you can also override the behavior of an inherited member function in the `RedCircle` class, but now
 you don't have to add new lines of code for every inherited member function.
 
-For more information about delegation, see [Delegation](delegation.md).
+For more information, see [Delegation](delegation.md).
 
 ## Classes and interfaces practice
 
@@ -440,10 +438,11 @@ the `play()` function to print the following: `"Playing audio: $title, composed 
     </def>
 </deflist>
 
+|---|---|
 ```kotlin
 interface // write your code here
 
-// write your code here
+class // write your code here
 ```
 {validate="false" kotlin-runnable="true" kotlin-min-compiler-version="1.3" id="kotlin-tour-classes-interfaces-exercise-2"}
 
@@ -467,20 +466,19 @@ class Audio(override val title: String, val composer: String) : Media {
 You're building a payment processing system for an e-commerce application. Each payment method needs to be able to 
 authorize a payment and process a transaction. Some payments also need to be able to process refunds.
 
-Firstly, in the `Refundable` interface add a function called `refund()` to process refunds.
+1. In the `Refundable` interface, add a function called `refund()` to process refunds.
 
-Secondly, in the `PaymentMethod` abstract class:
+2. In the `PaymentMethod` abstract class:
+   * Add a function called `authorize()` that takes an amount and prints a message containing the amount.
+   * Add an abstract function called `processPayment()` that also takes an amount.
 
-* Add a function called `authorize()` that takes an amount and prints a message containing the amount.
-* Add an abstract function called `processPayment()` that also takes an amount.
-
-Thirdly, create a class called `CreditCard` that implements the `Refundable` interface and `PaymentMethod` abstract class.
+3. Create a class called `CreditCard` that implements the `Refundable` interface and `PaymentMethod` abstract class.
 In this class, add implementations for the `refund()` and `processPayment()` functions so that they print the following 
 statements:
+   * `"Refunding $amount to the credit card."`
+   * `"Processing credit card payment of $amount."`
 
-* `"Refunding $amount to the credit card."`
-* `"Processing credit card payment of $amount."`
-
+|---|---|
 ```kotlin
 interface Refundable {
     // write your code here
@@ -538,13 +536,13 @@ fun main() {
 
 ### Exercise 4 {initial-collapse-state="collapsed" collapsible="true" id="classes-interfaces-exercise-4"}
 
-You have a simple messaging app that has some basic message functionality, but you want to add some functionality for 
+You have a simple messaging app that has some basic functionality, but you want to add some functionality for 
 _smart_ messages without significantly duplicating your code.
 
 In the code below, define a class called `SmartMessenger` that inherits from the `BasicMessenger` class but delegates 
 the implementation to an instance of the `BasicMessenger` class. 
 
-In the `SmartMessenger` class, override the `sendMessage()` function for sending smart messages. The function must accept
+In the `SmartMessenger` class, override the `sendMessage()` function to send smart messages. The function must accept
 a `message` as an input and return a printed statement: `"Sending a smart message: $message"`. In addition, call the 
 `sendMessage()` function from the `BasicMessenger` class and prefix the message with `[smart]`.
 
@@ -652,14 +650,14 @@ the parent class parameters: `make` and `model`.
 
 ### Overriding inherited behavior
 
-If you want to inherit from a class but change some of the behavior, you can do so by overriding the inherited behavior.
+If you want to inherit from a class but change some of the behavior, you can override the inherited behavior.
 
 By default, it's not possible to override a member function or property of a parent class. Just like with abstract classes,
 you need to add special keywords.
 
 #### Member functions
 
-To allow a function in the parent class to be overridden, use the `open` keyword before it's declaration in the parent class:
+To allow a function in the parent class to be overridden, use the `open` keyword before its declaration in the parent class:
 
 ```kotlin
 open fun displayInfo() {}
@@ -727,36 +725,18 @@ override val transmissionType: String
 
 Properties can be overridden in the class header or in the class body:
 
-<table header-style="top">
-   <tr>
-       <td>Class header</td>
-       <td>Class body</td>
-   </tr>
-   <tr>
-<td>
-
 ```kotlin
 open class Vehicle(val make: String, val model: String, open val transmissionType: String)
 
-class Car(make: String, model: String, val numberOfDoors: Int, override val transmissionType: String = "Automatic") : Vehicle(make, model)
-```
+// In class header
+class Car(make: String, model: String, val numberOfDoors: Int, override val transmissionType: String = "Automatic") :
+    Vehicle(make, model)
 
-</td>
-<td>
-
-```kotlin
-open class Vehicle(val make: String, val model: String) {
-    open val transmissionType: String = ""
-}
-
+// In class body
 class Car(make: String, model: String, val numberOfDoors: Int) : Vehicle(make, model) {
     override val transmissionType: String = "Automatic"
 }
 ```
-
-</td>
-</tr>
-</table>
 
 > If the property you want to override in the parent class has no default value, you must initialize it in the child class.
 >

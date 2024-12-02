@@ -1,7 +1,7 @@
 [//]: # (title: Intermediate: Objects and special classes)
 
 In this chapter, you'll expand your understanding of classes by exploring object declarations and special classes
-that have specific purposes. This knowledge will help you efficiently manage behavior across your projects.
+with specific purposes. This knowledge will help you efficiently manage behavior across your projects.
 
 ## Object declarations
 
@@ -11,10 +11,10 @@ use as a single reference point for your program or to coordinate behavior acros
 
 > A class that has only one instance that is easily accessible is called a **singleton**.
 >
-{style="note"}
+{style="tip"}
 
-Objects in Kotlin are lazy. They are only created once they are accessed. Kotlin also ensures that all objects are created
-in a thread-safe manner so that you don't have to check this manually yourself.
+Objects in Kotlin are **lazy**, meaning they are created only when accessed. Kotlin also ensures that all
+objects are created in a thread-safe manner so that you don't have to check this manually.
 
 To create an object declaration, use the `object` keyword:
 
@@ -24,7 +24,7 @@ object DoAuth {}
 
 Following the name of your `object`, add any properties or member functions within the object body defined by curly braces `{}`.
 
-> Objects can't have constructors so don't have a header like a class does.
+> Objects can't have constructors, so they don't have headers like classes.
 >
 {style="note"}
 
@@ -45,7 +45,7 @@ fun main(){
 ```
 
 The object has a member function called `takeParams` that accepts `username` and `password` variables as parameters
-and returns a string to console. The `DoAuth` object is only created when the function is called for the first time.
+and returns a string to the console. The `DoAuth` object is only created when the function is called for the first time.
 
 > Objects can inherit from classes and interfaces. For example:
 > 
@@ -110,7 +110,7 @@ keyword:
 companion object Bonger {}
 ```
 
-> A companion object doesn't have to have a name. If you don't define one, the default is: `Companion`.
+> A companion object doesn't have to have a name. If you don't define one, the default is `Companion`.
 > 
 {style="note"}
 
@@ -145,8 +145,8 @@ For more information about companion objects, see [](object-declarations.md#comp
 
 ### Exercise 1 {initial-collapse-state="collapsed" collapsible="true" id="objects-exercise-1"}
 
-You run a coffee shop and you have a system for tracking customer orders. Consider the code below and complete the declaration
-of the second two data object so that the following code in the `main()` function runs successfully.
+You run a coffee shop and have a system for tracking customer orders. Consider the code below and complete the declaration
+of the second data object so that the following code in the `main()` function runs successfully:
 
 ```kotlin
 interface Order {
@@ -224,8 +224,8 @@ fun main() {
 ### Exercise 2 {initial-collapse-state="collapsed" collapsible="true" id="objects-exercise-2"}
 
 Create an object declaration that inherits from the `Vehicle` interface to create a unique vehicle type: `FlyingSkateboard`.
-Implement the `name` property and `move()` function in your object so that the following code in the `main()` function runs 
-successfully.
+Implement the `name` property and the `move()` function in your object so that the following code in the `main()` function runs 
+successfully:
 
 ```kotlin
 interface Vehicle {
@@ -265,9 +265,9 @@ fun main() {
 
 ### Exercise 3 {initial-collapse-state="collapsed" collapsible="true" id="objects-exercise-3"}
 
-You have an app where you want to record temperatures. The class itself stores the information in degrees Celsius, but 
-you want to provide an easy way to create an instance also from degrees Fahrenheit. Complete the code so that
-the following code in the `main()` function runs successfully.
+You have an app where you want to record temperatures. The class itself stores the information in Celsius, but 
+you want to provide an easy way to create an instance in Fahrenheit as well. Complete the data class so that
+the following code in the `main()` function runs successfully:
 
 <deflist collapsible="true">
     <def title="Hint">
@@ -275,6 +275,7 @@ the following code in the `main()` function runs successfully.
     </def>
 </deflist>
 
+|---|---|
 ```kotlin
 data class Temperature(val celsius: Double) {
     val fahrenheit: Double = celsius * 9 / 5 + 32
@@ -322,7 +323,7 @@ from it within the same package. It's not possible to inherit from the sealed cl
 > A package is a collection of code with related classes and functions, typically within a directory. To learn more about
 > packages in Kotlin, see [Packages and imports](packages.md).
 > 
-{style="note"}
+{style="tip"}
 
 To create a sealed class, use the `sealed` keyword:
 
@@ -360,7 +361,7 @@ In the example:
 * The `Human` class inherits from the `Mammal` sealed class and uses the `name` parameter from the `Mammal` class as the
 `humanName` parameter in its own constructor. It also has the `job` parameter in its constructor.
 * The `greetMammal()` function accepts an argument of `Mammal` type and returns a string.
-* Within the `greetMammal()` function body, is a `when` expression that uses the [`is` operator](typecasts.md#is-and-is-operators) to check the type of `mammal` and decide which action to perform.
+* Within the `greetMammal()` function body, there's a `when` expression that uses the [`is` operator](typecasts.md#is-and-is-operators) to check the type of `mammal` and decide which action to perform.
 * The `main()` function calls the `greetMammal()` function with an instance of the `Cat` class and `name` parameter called `Snowy`.
 
 For more information about sealed classes and their recommended use cases, see [Sealed classes and interfaces](sealed-classes.md).
@@ -413,8 +414,8 @@ fun main() {
 
 Enum classes can have properties and member functions just like normal classes. 
 
-For example, let's say that you are working with HTML and you want to create an enum class that contains some colors. 
-You want these colors to each have a property, let's call it `rgb`, that contains their RGB value as a hexadecimal. 
+For example, let's say you're working with HTML and you want to create an enum class containing some colors. 
+You want each color to have a property, let's call it `rgb`, that contains their RGB value as a hexadecimal. 
 When creating the enum constants, you must initialize it with this property:
 
 ```kotlin
@@ -426,7 +427,7 @@ enum class Color(val rgb: Int) {
 }
 ```
 
-> Kotlin stores hexadecimals as integers so the `rgb` property has `Int` type and not `String` type.
+> Kotlin stores hexadecimals as integers, so the `rgb` property has the `Int` type, not the `String` type.
 >
 {style="note"}
 
@@ -458,14 +459,14 @@ fun main() {
 ```
 
 In this example, the `containsRed()` member function accesses the value of the enum constant's `rgb` property using the
-`this` keyword, and checks if the hexadecimal value contains `FF` as its first bits to return a boolean value.
+`this` keyword and checks if the hexadecimal value contains `FF` as its first bits to return a boolean value.
 
-For more information about enum classes, see [Enum classes](enum-classes.md).
+For more information, see [Enum classes](enum-classes.md).
 
 ### Inline value classes
 
 Sometimes in your code, you may want to create small objects from classes and use them only briefly. This approach can
-have a performance impact. Inline value classes are a special type of class that avoid this performance impact. However,
+have a performance impact. Inline value classes are a special type of class that avoids this performance impact. However,
 they can only contain values.
 
 To create an inline value class, use the `value` keyword and the `@JvmInline` annotation:
@@ -475,8 +476,8 @@ To create an inline value class, use the `value` keyword and the `@JvmInline` an
 value class Email
 ```
 
-> The `@JvmInline` annotation is used by Kotlin to know to optimize the code when it is compiled. To learn more about
-> annotations, see [Annotations](annotations.md).
+> The `@JvmInline` annotation instructs Kotlin to optimize the code when it is compiled. To learn more,
+> see [Annotations](annotations.md).
 > 
 {style="note"}
 
@@ -503,13 +504,13 @@ fun main() {
 In the example:
 
 * `Email` is an inline value class that has one property in the class header: `value`.
-* The `sendEmail()` function accepts objects with type `Email` and prints a string to standard output.
+* The `sendEmail()` function accepts objects with type `Email` and prints a string to the standard output.
 * The `main()` function:
     * Creates an instance of the `Email` class called `email`.
     * Calls the `sendEmail()` function on the `email` object.
 
-By using an inline value class, the class is inlined and used directly in your code without creating an object. This can 
-significantly reduce memory footprint and improve the runtime performance of your code.
+By using an inline value class, you make the class inlined and can use it directly in your code without creating an object.
+This can significantly reduce memory footprint and improve your code's runtime performance.
 
 For more information about inline value classes, see [Inline value classes](inline-classes.md).
 
